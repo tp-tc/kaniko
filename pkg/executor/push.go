@@ -34,6 +34,7 @@ import (
 	"github.com/GoogleContainerTools/kaniko/pkg/timing"
 	"github.com/GoogleContainerTools/kaniko/pkg/util"
 	"github.com/GoogleContainerTools/kaniko/pkg/version"
+	legacy "github.com/google/go-containerregistry/pkg/legacy/tarball"
 	"github.com/google/go-containerregistry/pkg/name"
 	v1 "github.com/google/go-containerregistry/pkg/v1"
 	"github.com/google/go-containerregistry/pkg/v1/empty"
@@ -200,6 +201,20 @@ func DoPush(image v1.Image, opts *config.KanikoOptions) error {
 			tagToImage[destRef] = image
 		}
 		return tarball.MultiWriteToFile(opts.TarPath, tagToImage)
+	}
+
+	if opts.LegacyTarPath != "" {
+		tagToImage := map[name.Reference]v1.Image{}
+		for _, destRef := range destRefs {
+			tagToImage[destRef] = image
+		}
+		w, err := os.Create(opts.LegacyTarPath)
+		if err != nil {
+			return err
+		}
+		defer w.Close()
+
+		return legacy.MultiWrite(tagToImage, w)
 	}
 
 	if opts.NoPush {

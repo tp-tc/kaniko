@@ -34,6 +34,7 @@ type KanikoOptions struct {
 	SnapshotMode            string
 	Bucket                  string
 	TarPath                 string
+	LegacyTarPath           string
 	Target                  string
 	CacheRepo               string
 	DigestFile              string

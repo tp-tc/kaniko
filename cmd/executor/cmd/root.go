@@ -154,6 +154,7 @@ func addKanikoOptionsFlags() {
 	RootCmd.PersistentFlags().BoolVarP(&opts.InsecurePull, "insecure-pull", "", false, "Pull from insecure registry using plain HTTP")
 	RootCmd.PersistentFlags().BoolVarP(&opts.SkipTLSVerifyPull, "skip-tls-verify-pull", "", false, "Pull from insecure registry ignoring TLS verify")
 	RootCmd.PersistentFlags().StringVarP(&opts.TarPath, "tarPath", "", "", "Path to save the image in as a tarball instead of pushing")
+	RootCmd.PersistentFlags().StringVarP(&opts.LegacyTarPath, "legacyTarPath", "", "", "Path to save the image in as a legacy tarball instead of pushing")
 	RootCmd.PersistentFlags().BoolVarP(&opts.SingleSnapshot, "single-snapshot", "", false, "Take a single snapshot at the end of the build.")
 	RootCmd.PersistentFlags().BoolVarP(&opts.Reproducible, "reproducible", "", false, "Strip timestamps out of the image to make it reproducible")
 	RootCmd.PersistentFlags().StringVarP(&opts.Target, "target", "", "", "Set the target build stage to build")
@@ -292,6 +293,7 @@ func resolveRelativePaths() error {
 		&opts.SrcContext,
 		&opts.CacheDir,
 		&opts.TarPath,
+		&opts.LegacyTarPath,
 		&opts.DigestFile,
 		&opts.ImageNameDigestFile,
 	}
