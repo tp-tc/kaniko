@@ -629,9 +629,6 @@ func DoBuild(opts *config.KanikoOptions) (v1.Image, error) {
 		logrus.Debugf("mapping digest %v to cachekey %v", d.String(), sb.finalCacheKey)
 
 		if stage.Final {
-			sourceImage, err = mutate.CreatedAt(sourceImage, v1.Time{Time: time.Now()})
-			if err != nil {
-				return nil, err
 			if opts.Squash {
 				sourceImage, err = mutate.Squash(sourceImage)
 				if err != nil {
@@ -640,6 +637,11 @@ func DoBuild(opts *config.KanikoOptions) (v1.Image, error) {
 			}
 			if opts.Reproducible {
 				sourceImage, err = mutate.Canonical(sourceImage)
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				sourceImage, err = mutate.CreatedAt(sourceImage, v1.Time{Time: time.Now()})
 				if err != nil {
 					return nil, err
 				}
